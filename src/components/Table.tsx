@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import icon5 from '../assets/icon5.svg';
 import icon6 from '../assets/icon6.svg';
-import line1 from '../assets/line1.svg';
+// import line1 from '../assets/line1.svg';
 
 interface Rows {
   id: number;
@@ -259,7 +259,7 @@ const Table = (props: any) => {
                   width: row.level === 0 ? 'calc(110 / 1681 * 100%)' : `calc((110 + 20 * ${row.level})/ 1681 * 100%)`
                 }}
               >
-                {row.level !== 0 && <img src={line1} alt="" />}
+                {/* {row.level !== 0 && <img src={line1} alt="" />} */}
                 <img src={icon5} className="tableImg" onClick={() => addNewRow(row, idx)} />
                 {updForm?.[idx] && <img className="tableImg1" src={icon6} onClick={() => deleteRow(row.id, idx)} />}
               </td>
