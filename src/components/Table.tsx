@@ -142,7 +142,7 @@ const Table = (props: any) => {
   };
 
   // UPDATE ROW
-  const handleUpdRow = async (e: any, parentId: number | null, idx: number, id: number) => {
+  const handleUpdRow = async (e: any, idx: number, id: number) => {
     if (e.keyCode == 13) {
       try {
         const res = await axios.post(`http://185.244.172.108:8081/v1/outlay-rows/entity/${props.entity}/row/${id}/update`, {
@@ -336,35 +336,35 @@ const Table = (props: any) => {
                       }}
                       value={row?.rowName}
                       onChange={e => handleOnChange1('rowName', e, idx)}
-                      onKeyDown={e => handleUpdRow(e, row.level === 0 ? null : rows[idx - 1].id, idx, row.id)}
+                      onKeyDown={e => handleUpdRow(e, idx, row.id)}
                     />
                     <input
                       type="number"
                       className="salaryInput"
                       value={row.salary}
                       onChange={e => handleOnChange1('salary', e, idx)}
-                      onKeyDown={e => handleUpdRow(e, row.level === 0 ? null : rows[idx - 1].id, idx, row.id)}
+                      onKeyDown={e => handleUpdRow(e, idx, row.id)}
                     />
                     <input
                       type="number"
                       className="equipmentCostsInput"
                       value={row.equipmentCosts}
                       onChange={e => handleOnChange1('equipmentCosts', e, idx)}
-                      onKeyDown={e => handleUpdRow(e, row.level === 0 ? null : rows[idx - 1].id, idx, row.id)}
+                      onKeyDown={e => handleUpdRow(e, idx, row.id)}
                     />
                     <input
                       type="number"
                       className="overheadsInput"
                       value={row.overheads}
                       onChange={e => handleOnChange1('overheads', e, idx)}
-                      onKeyDown={e => handleUpdRow(e, row.level === 0 ? null : rows[idx - 1].id, idx, row.id)}
+                      onKeyDown={e => handleUpdRow(e, idx, row.id)}
                     />
                     <input
                       type="number"
                       className="estimatedProfitInput"
                       value={row.estimatedProfit}
                       onChange={e => handleOnChange1('estimatedProfit', e, idx)}
-                      onKeyDown={e => handleUpdRow(e, row.level === 0 ? null : rows[idx - 1].id, idx, row.id)}
+                      onKeyDown={e => handleUpdRow(e, idx, row.id)}
                     />
                   </form>
                 </td>
