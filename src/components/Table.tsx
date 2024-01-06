@@ -103,11 +103,14 @@ const Table = (props: any) => {
   };
 
   // SET MODE FOR UPDATE ROW OR ADD NEW ROW
-  const setUpdateMode = (idx: number | null) => {
+  const setUpdateMode = (idx: number | null, addrowInd:Boolean) => {
     if (idx === null) {
       setUpdForm(new Array(rows.length).fill(false));
-    } else {
+    } else if (!addrowInd) {
       let newArr = updForm?.map((item, i) => idx === i ? !item : false);
+      setUpdForm(newArr);
+    } else {
+      let newArr = new Array(idx).fill(false).map((item, i) => idx-1 === i ? true : false);
       setUpdForm(newArr);
     }
   };
@@ -142,7 +145,7 @@ const Table = (props: any) => {
         const response = await axios.post(`http://185.244.172.108:8081/v1/outlay-rows/entity/${props.entity}/row/create`,
           newObj
         );
-        setUpdateMode(idx);
+        setUpdateMode(idx, false);
         getInfo();
         setInd(false);
         setNewRowObj(initRow);
@@ -169,7 +172,7 @@ const Table = (props: any) => {
           salary: rows[idx].salary,
           supportCosts: 0
         });
-        setUpdateMode(idx);
+        setUpdateMode(idx, false);
         getInfo();
         setInd(false);
         setNewRowObj(initRow);
@@ -185,12 +188,12 @@ const Table = (props: any) => {
     if (!id) {
       let newArr = rows.filter((item, i) => idx === i ? "" : item)
       setRows(newArr);
-      setUpdateMode(idx);
+      setUpdateMode(idx, false);
       setInd(false);
     } else {
       try {
         const res = await axios.delete(`http://185.244.172.108:8081/v1/outlay-rows/entity/${props.entity}/row/${id}/delete`);
-        setUpdateMode(idx);
+        setUpdateMode(idx, false);
         getInfo();
         setInd(false);
         return res.data;
@@ -215,6 +218,7 @@ const Table = (props: any) => {
         parentId: null,
       }]
       setRows(newArr);
+      setUpdateMode(newArr.length, true);
     } else if (!ind && idx !== null) {
       let newArr1 = rows.slice(0, (idx + 1));
       let newArr2 = rows.slice(idx + 1);
@@ -229,10 +233,10 @@ const Table = (props: any) => {
         parentId: row.id,
       }, ...newArr2]
       setRows(newArr);
+      setUpdateMode(idx+1, false);
+      setInd(true);
     }
-    console.log(newArr);
-    setUpdForm(new Array(newArr.length).fill(false));
-    setInd(true);
+    
   };
 
   useEffect(() => {
@@ -262,7 +266,7 @@ const Table = (props: any) => {
         </thead>
         <tbody>
           {rows?.map((row, idx) => (
-            <tr key={idx} className='tableBodyRow' onDoubleClick={() => setUpdateMode(idx)}>
+            <tr key={idx} className='tableBodyRow' onDoubleClick={() => {setUpdateMode(idx, false); setInd(!ind)}}>
               <td
                 className="levelColumn"
                 style={{
