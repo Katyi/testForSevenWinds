@@ -110,7 +110,7 @@ const Table = (props: any) => {
       let newArr = updForm?.map((item, i) => idx === i ? !item : false);
       setUpdForm(newArr);
     } else {
-      let newArr = new Array(idx).fill(false).map((item, i) => idx-1 === i ? true : false);
+      let newArr = new Array(idx).fill(false).map((item, i) => idx-1 === i ? true : item);
       setUpdForm(newArr);
     }
   };
