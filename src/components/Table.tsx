@@ -104,14 +104,17 @@ const Table = (props: any) => {
 
   // SET MODE FOR UPDATE ROW OR ADD NEW ROW
   const setUpdateMode = (idx: number | null, addrowInd:Boolean) => {
+    console.log(idx)
     if (idx === null) {
       setUpdForm(new Array(rows.length).fill(false));
     } else if (!addrowInd) {
       let newArr = updForm?.map((item, i) => idx === i ? !item : false);
       setUpdForm(newArr);
+      console.log(updForm?.length)
     } else {
       let newArr = new Array(idx).fill(false).map((item, i) => idx-1 === i ? true : item);
       setUpdForm(newArr);
+      console.log(updForm?.length)
     }
   };
 
@@ -219,6 +222,7 @@ const Table = (props: any) => {
       }]
       setRows(newArr);
       setUpdateMode(newArr.length, true);
+      setInd(true);
     } else if (!ind && idx !== null) {
       let newArr1 = rows.slice(0, (idx + 1));
       let newArr2 = rows.slice(idx + 1);
@@ -233,10 +237,16 @@ const Table = (props: any) => {
         parentId: row.id,
       }, ...newArr2]
       setRows(newArr);
-      setUpdateMode(idx+1, false);
+      if (idx+1 === newArr.length) {
+        console.log(idx+1, newArr.length)
+        setUpdateMode(idx+1, false);
+      } else {
+        console.log(idx+1, newArr.length)
+        setUpdateMode(idx+2, true);
+      }
+      
       setInd(true);
     }
-    
   };
 
   useEffect(() => {
