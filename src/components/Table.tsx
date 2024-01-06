@@ -19,7 +19,8 @@ interface Rows {
   overheads: number;
   estimatedProfit: number;
   child: Rows[];
-  parentId: number|null;
+  parentId: number | null;
+  childCount: number;
 }
 interface InputsFileds {
   rowName: string;
@@ -42,23 +43,23 @@ const Table = (props: any) => {
   const [rows, setRows] = useState<Rows[]>([]);
   const [ind, setInd] = useState<Boolean>(false);
   const [updForm, setUpdForm] = useState<Boolean[]>();
-  
+
 
   // GET ALL CHILDRENS AND DEFINE LEVELS
   function getAllChilds(arr: [Rows]) {
     let result: any = [];
     let level: number = 0;
-    let parentId: number|null = null;
+    let parentId: number | null = null;
     arr.forEach(elem => {
       level = 0;
       parentId = null;
       addElem(elem)
     });
-    
+
 
     function addElem(elem: any) {
       if (elem.child.length > 0) {
-        let { child,  ...rest } = elem;
+        let { child, ...rest } = elem;
         rest.level = level;
         rest.parentId = parentId;
         child.parentId = elem.id;
@@ -73,6 +74,17 @@ const Table = (props: any) => {
         elem.level = level;
         elem.parentId = parentId;
         result.push(elem);
+      }
+    }
+    
+    for (let i = 0; i < result.length; i++) {
+      result[i].childCount = 0;
+      for (let j = i + 1; j < result.length; j++) {
+        if (result[i].level < result[j].level) {
+          result[i].childCount = result[i].childCount + 1;
+        } else {
+          j = result.length
+        }
       }
     }
     return result;
@@ -193,7 +205,7 @@ const Table = (props: any) => {
     let newArr: any = [];
     if (!row && !ind) {
       newArr = [...rows, {
-        idx:idx,
+        childCount: 0,
         level: 0,
         rowName: "",
         salary: 0,
@@ -207,7 +219,7 @@ const Table = (props: any) => {
       let newArr1 = rows.slice(0, (idx + 1));
       let newArr2 = rows.slice(idx + 1);
       newArr = [...newArr1, {
-        idx: idx,
+        childCount: 0,
         level: row.level + 1,
         rowName: "",
         salary: 0,
@@ -218,6 +230,7 @@ const Table = (props: any) => {
       }, ...newArr2]
       setRows(newArr);
     }
+    console.log(newArr);
     setUpdForm(new Array(newArr.length).fill(false));
     setInd(true);
   };
@@ -234,9 +247,9 @@ const Table = (props: any) => {
       <table>
         <thead>
           <tr className='tableHead'>
-            <th 
-              className="levelColumn" 
-              onClick={() => addNewRow(null, rows.length-1)}
+            <th
+              className="levelColumn"
+              onClick={() => addNewRow(null, rows.length - 1)}
             >
               Уровень
             </th>
@@ -250,7 +263,7 @@ const Table = (props: any) => {
         <tbody>
           {rows?.map((row, idx) => (
             <tr key={idx} className='tableBodyRow' onDoubleClick={() => setUpdateMode(idx)}>
-              <td 
+              <td
                 className="levelColumn"
                 style={{
                   display: "flex",
@@ -260,12 +273,12 @@ const Table = (props: any) => {
                 }}
               >
                 {/* {row.level !== 0 && <img src={line1} alt="" />} */}
-                <img src={icon5} className="tableImg" onClick={() => addNewRow(row, idx)} />
+                <img src={icon5} className="tableImg" onClick={() => addNewRow(row, row.childCount + idx)} />
                 {updForm?.[idx] && <img className="tableImg1" src={icon6} onClick={() => deleteRow(row.id, idx)} />}
               </td>
               {!updForm?.[idx] &&
                 <>
-                  <td 
+                  <td
                     className="rowNameColumn"
                     style={{
                       width: row.level === 0 ? 'calc(757 / 1681 * 100%)' : `calc((757 - 20 * ${row.level})/ 1681 * 100%)`
@@ -287,7 +300,7 @@ const Table = (props: any) => {
                       type="text"
                       className="rowNameInput"
                       style={{
-                        width: row.level === 0 ? 'calc((757 + 22) / 1681 * 100%)' : `calc((757 + 26 - (14) * ${row.level}) / 1681 * 100%)` 
+                        width: row.level === 0 ? 'calc((757 + 22) / 1681 * 100%)' : `calc((757 + 26 - (14) * ${row.level}) / 1681 * 100%)`
                       }}
                       value={newRowObj?.rowName || ""}
                       onChange={e => handleOnChange('rowName', e)}
@@ -332,7 +345,7 @@ const Table = (props: any) => {
                       type="text"
                       className="rowNameInput"
                       style={{
-                        width: row.level === 0 ? 'calc((757 + 22) / 1681 * 100%)' : `calc((757 + 26 - (14) * ${row.level}) / 1681 * 100%)` 
+                        width: row.level === 0 ? 'calc((757 + 22) / 1681 * 100%)' : `calc((757 + 26 - (14) * ${row.level}) / 1681 * 100%)`
                       }}
                       value={row?.rowName}
                       onChange={e => handleOnChange1('rowName', e, idx)}
