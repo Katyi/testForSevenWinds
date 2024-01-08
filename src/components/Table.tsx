@@ -278,12 +278,18 @@ const Table = (props: any) => {
                   display: "flex",
                   alignItems: "center",
                   paddingLeft: row.level === 0 ? '12px' : `calc(${20 / 1681 * 100 * row.level}% + 12px)`,
-                  width: row.level === 0 ? 'calc(110 / 1681 * 100%)' : `calc((110 + 20 * ${row.level})/ 1681 * 100%)`
+                  width: row.level === 0 ? 'calc(110 / 1681 * 100%)' : `calc((110 + 20 * ${row.level})/ 1681 * 100%)`,
                 }}
               >
                 {/* {row.level !== 0 && <img src={line1} alt="" />} */}
-                <img src={icon5} className="tableImg" onClick={() => addNewRow(row, row.childCount + idx)} />
-                {updForm?.[idx] && <img className="tableImg1" src={icon6} onClick={() => deleteRow(row.id, idx)} />}
+                <button className="tableButton">
+                  <img src={icon5} className="tableImg" onClick={() => addNewRow(row, row.childCount + idx)} />
+                </button>
+                {updForm?.[idx] && 
+                  <button className="tableButton">
+                    <img className="tableImg1" src={icon6} onClick={() => deleteRow(row.id, idx)} />
+                </button>
+                }
               </td>
               {!updForm?.[idx] &&
                 <>

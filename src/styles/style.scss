@@ -200,6 +200,13 @@ th:nth-child(6), td:nth-child(6) {
 	width: calc((757px + 800px)/1681px * 100%);
 	gap: 24px;
 }
+.tableButton {
+	background: transparent;
+	border: none;
+	user-select: none; 
+	margin: 0;
+	padding: 0;
+}
 .tableImg {
 	height: 24px;
 	width: 24px;

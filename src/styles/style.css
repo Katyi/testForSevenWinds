@@ -296,6 +296,14 @@ th:nth-child(6), td:nth-child(6) {
   gap: 24px;
 }
 
+.tableButton {
+  background: transparent;
+  border: none;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
 .tableImg {
   height: 24px;
   width: 24px;
